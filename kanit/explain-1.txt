@@ -1,0 +1,39 @@
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=true
++- == Final Plan ==
+   *(4) Sort [toplam_ciro#8874 DESC NULLS LAST], true, 0
+   +- AQEShuffleRead coalesced
+      +- ShuffleQueryStage 2
+         +- Exchange rangepartitioning(toplam_ciro#8874 DESC NULLS LAST, 8), ENSURE_REQUIREMENTS, [plan_id=3467]
+            +- *(3) Project [kategori#7841, toplam_ciro#8874, satis_adedi#8876L, iade_adedi#8878L, round((cast((iade_adedi#8878L * 100) as double) / cast(satis_adedi#8876L as double)), 2) AS iade_orani_yuzde#8883]
+               +- *(3) HashAggregate(keys=[kategori#7841], functions=[sum(CASE WHEN (tur#7812 = satis) THEN (cast(adet#7807L as double) * birim_fiyat#7808) ELSE 0.0 END), sum(CASE WHEN (tur#7812 = satis) THEN adet#7807L ELSE 0 END), sum(CASE WHEN (tur#7812 = iade) THEN adet#7807L ELSE 0 END)])
+                  +- AQEShuffleRead coalesced
+                     +- ShuffleQueryStage 1
+                        +- Exchange hashpartitioning(kategori#7841, 8), ENSURE_REQUIREMENTS, [plan_id=3422]
+                           +- *(2) HashAggregate(keys=[kategori#7841], functions=[partial_sum(CASE WHEN (tur#7812 = satis) THEN (cast(adet#7807L as double) * birim_fiyat#7808) ELSE 0.0 END), partial_sum(CASE WHEN (tur#7812 = satis) THEN adet#7807L ELSE 0 END), partial_sum(CASE WHEN (tur#7812 = iade) THEN adet#7807L ELSE 0 END)])
+                              +- *(2) Project [adet#7807L, birim_fiyat#7808, tur#7812, kategori#7841]
+                                 +- *(2) BroadcastHashJoin [urun_id#7813L], [cast(urun_id#7840 as bigint)], Inner, BuildRight, false
+                                    :- *(2) Project [adet#7807L, birim_fiyat#7808, tur#7812, urun_id#7813L]
+                                    :  +- *(2) Filter isnotnull(urun_id#7813L)
+                                    :     +- *(2) ColumnarToRow
+                                    :        +- FileScan parquet [adet#7807L,birim_fiyat#7808,tur#7812,urun_id#7813L,tarih#7814] Batched: true, DataFilters: [isnotnull(urun_id#7813L)], Format: Parquet, Location: PreparedDeltaFileIndex(1 paths)[s3a://tablolar/satis], PartitionFilters: [], PushedFilters: [IsNotNull(urun_id)], ReadSchema: struct<adet:bigint,birim_fiyat:double,tur:string,urun_id:bigint>
+                                    +- BroadcastQueryStage 0
+                                       +- BroadcastExchange HashedRelationBroadcastMode(List(cast(input[0, int, false] as bigint)),false), [plan_id=3348]
+                                          +- *(1) Filter isnotnull(urun_id#7840)
+                                             +- FileScan csv [urun_id#7840,kategori#7841] Batched: false, DataFilters: [isnotnull(urun_id#7840)], Format: CSV, Location: InMemoryFileIndex(1 paths)[s3a://ham/boyut/satis/urunler.csv], PartitionFilters: [], PushedFilters: [IsNotNull(urun_id)], ReadSchema: struct<urun_id:int,kategori:string>
++- == Initial Plan ==
+   Sort [toplam_ciro#8874 DESC NULLS LAST], true, 0
+   +- Exchange rangepartitioning(toplam_ciro#8874 DESC NULLS LAST, 8), ENSURE_REQUIREMENTS, [plan_id=3320]
+      +- Project [kategori#7841, toplam_ciro#8874, satis_adedi#8876L, iade_adedi#8878L, round((cast((iade_adedi#8878L * 100) as double) / cast(satis_adedi#8876L as double)), 2) AS iade_orani_yuzde#8883]
+         +- HashAggregate(keys=[kategori#7841], functions=[sum(CASE WHEN (tur#7812 = satis) THEN (cast(adet#7807L as double) * birim_fiyat#7808) ELSE 0.0 END), sum(CASE WHEN (tur#7812 = satis) THEN adet#7807L ELSE 0 END), sum(CASE WHEN (tur#7812 = iade) THEN adet#7807L ELSE 0 END)])
+            +- Exchange hashpartitioning(kategori#7841, 8), ENSURE_REQUIREMENTS, [plan_id=3316]
+               +- HashAggregate(keys=[kategori#7841], functions=[partial_sum(CASE WHEN (tur#7812 = satis) THEN (cast(adet#7807L as double) * birim_fiyat#7808) ELSE 0.0 END), partial_sum(CASE WHEN (tur#7812 = satis) THEN adet#7807L ELSE 0 END), partial_sum(CASE WHEN (tur#7812 = iade) THEN adet#7807L ELSE 0 END)])
+                  +- Project [adet#7807L, birim_fiyat#7808, tur#7812, kategori#7841]
+                     +- BroadcastHashJoin [urun_id#7813L], [cast(urun_id#7840 as bigint)], Inner, BuildRight, false
+                        :- Project [adet#7807L, birim_fiyat#7808, tur#7812, urun_id#7813L]
+                        :  +- Filter isnotnull(urun_id#7813L)
+                        :     +- FileScan parquet [adet#7807L,birim_fiyat#7808,tur#7812,urun_id#7813L,tarih#7814] Batched: true, DataFilters: [isnotnull(urun_id#7813L)], Format: Parquet, Location: PreparedDeltaFileIndex(1 paths)[s3a://tablolar/satis], PartitionFilters: [], PushedFilters: [IsNotNull(urun_id)], ReadSchema: struct<adet:bigint,birim_fiyat:double,tur:string,urun_id:bigint>
+                        +- BroadcastExchange HashedRelationBroadcastMode(List(cast(input[0, int, false] as bigint)),false), [plan_id=3311]
+                           +- Filter isnotnull(urun_id#7840)
+                              +- FileScan csv [urun_id#7840,kategori#7841] Batched: false, DataFilters: [isnotnull(urun_id#7840)], Format: CSV, Location: InMemoryFileIndex(1 paths)[s3a://ham/boyut/satis/urunler.csv], PartitionFilters: [], PushedFilters: [IsNotNull(urun_id)], ReadSchema: struct<urun_id:int,kategori:string>
+

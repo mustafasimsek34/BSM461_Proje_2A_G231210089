@@ -1,0 +1,25 @@
+Kategori,Metrik,Deger,Birim,Aciklama
+Z2_Format,JSON_Satir_Sayisi,3000000,satir,Ham veri toplam kayit
+Z2_Format,JSON_Okuma_Suresi,28.48,saniye,Elle sema ile JSON count
+Z10_Kalite,Kirli_Eksik_Kayit,3044,adet,Null veya <=0 degerli kayitlar
+Z10_Kalite,Tekrar_Eden_Kayit,5950,adet,Ayni siparis_id tekrari
+Z10_Kalite,Temiz_Kayit_Sayisi,2989017,adet,Analize giren net kayit
+Z2_Format,Ham_JSON_Boyut,441.2,MB,14 adet JSONL dosyasi
+Z2_Kodek,Parquet_snappy_Boyut,76.82,MB,8 dosya
+Z2_Kodek,Parquet_snappy_Yazma,13.44,saniye,3M satir yazma
+Z2_Kodek,Parquet_snappy_Okuma,1.26,saniye,Sum(adet) sorgu suresi
+Z2_Kodek,Parquet_zstd_Boyut,52.94,MB,8 dosya
+Z2_Kodek,Parquet_zstd_Yazma,5.42,saniye,3M satir yazma
+Z2_Kodek,Parquet_zstd_Okuma,0.53,saniye,Sum(adet) sorgu suresi
+Z2_Kodek,Parquet_gzip_Boyut,51.52,MB,8 dosya
+Z2_Kodek,Parquet_gzip_Yazma,10.22,saniye,3M satir yazma
+Z2_Kodek,Parquet_gzip_Okuma,0.51,saniye,Sum(adet) sorgu suresi
+Z4_Depo,Tarih_Bolumlu_Parquet_Dosya,112,adet,"Toplam 81.75 MB, ort 0.73 MB/dosya"
+Z3_Bolumleme,urun_id_EnBuyukPay,26.14,yuzde,En yogun anahtar: 1
+Z3_Bolumleme,urun_id_MaxBolOrt_8Bolum,3.27,kat,8 bolumde en dolu / ortalama
+Z3_Bolumleme,magaza_id_EnBuyukPay,10.76,yuzde,En yogun anahtar: 19
+Z3_Bolumleme,magaza_id_MaxBolOrt_8Bolum,1.75,kat,8 bolumde en dolu / ortalama
+Z7_Delta,Surum_0_Satir,2994042,satir,Ilk yazma surumu
+Z7_Delta,Surum_1_Satir,2989017,satir,Ikinci yazma (append) surumu
+Z5_Performans,SortMergeJoin_Ort_3Tekrar,6.231,saniye,Broadcast kapali join
+Z5_Performans,BroadcastJoin_Ort_3Tekrar,2.936,saniye,Broadcast acik join

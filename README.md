@@ -333,3 +333,5 @@ Bu yapı yerel geliştirme ve test amacıyla tek bilgisayarda çalışır:
 
 Üretim ortamında Kafka çoğaltması, dağıtık S3, Spark kümesi, kalıcı checkpoint,
 TLS, kimlik doğrulama, yetkilendirme, yedekleme ve izleme eklenmelidir.
+
+b
